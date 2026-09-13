@@ -12,6 +12,9 @@ const profiles = {
 const profileName = (__ENV.PROFILE || 'default').toLowerCase();
 export const options = profiles[profileName] || defaultOptions;
 
+import { textSummary } from 'https://jslib.k6.io/k6-summary/0.0.2/index.js';
+import { generateMarkdownReport } from './reporter.js';
+
 export default function () {
   // Test Grafana's official test API
   const res = http.get('https://test.k6.io');
@@ -22,4 +25,13 @@ export default function () {
   });
 
   sleep(1);
+}
+
+export function handleSummary(data) {
+  const reportFilename = `report-${profileName}.md`;
+  return {
+    stdout: textSummary(data, { indent: ' ', enableColors: true }),
+    'report.md': generateMarkdownReport(data, profileName),
+    [reportFilename]: generateMarkdownReport(data, profileName),
+  };
 }

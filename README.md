@@ -60,3 +60,21 @@ docker run --rm -i -v "$PWD:/work" -w /work grafana/k6 run simple-test.js
 # Full profile
 docker run --rm -i -v "$PWD:/work" -w /work -e PROFILE=full grafana/k6 run simple-test.js
 ```
+
+---
+
+## 📊 Automated Reports & Graphics
+
+After every run, k6's `handleSummary` automatically outputs a Markdown report with tables and an embedded **Mermaid latency chart**:
+
+- [report.md](file:///home/mikelus/github/k6-samples/report.md) (latest run)
+- `report-default.md` or `report-full.md` (profile-specific archive)
+
+### Viewing & Exporting
+
+1. **Confluence / Wikis**:
+   - In Confluence, use **Insert > Markdown** (or paste directly).
+   - Mermaid diagrams render via the Confluence Mermaid plugin or native Markdown viewer.
+2. **GitHub / GitLab / Bitbucket**:
+   - Renders directly in pull requests, issues, and wikis with interactive Mermaid charts.
+
