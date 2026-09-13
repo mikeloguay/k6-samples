@@ -1,53 +1,62 @@
 # k6 Load Testing Sample
 
-A simple [Grafana k6](https://k6.io/) load test script demonstrating:
-- A 30s ramp-up to 5 virtual users (VUs)
-- A 30s steady load at 5 VUs
-- A 30s ramp-down to 0 VUs
-- Requests against Grafana's official public testing endpoint: `https://test.k6.io`
+A simple [Grafana k6](https://k6.io/) load test script with modular configuration profiles targeting Grafana's test API (`https://test.k6.io`).
 
 ---
 
-## Prerequisites
+## Profiles
 
-Install k6 if you haven't already:
-
-### Linux (Debian/Ubuntu)
-```bash
-sudo gpg -k
-sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
-echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
-sudo apt-get update
-sudo apt-get install k6
-```
-
-### macOS (Homebrew)
-```bash
-brew install k6
-```
-
-### Docker
-If you prefer not to install it locally:
-```bash
-docker run --rm -i grafana/k6 run - <simple-test.js
-```
+- **`default`** ([options.default.js](file:///home/mikelus/github/k6-samples/options.default.js)):
+  - Ramp-up to **5 VUs** in 30s
+  - Stay at **5 VUs** for 30s
+  - Ramp-down to **0 VUs** in 30s
+- **`full`** ([options.full.js](file:///home/mikelus/github/k6-samples/options.full.js)):
+  - Ramp-up to **10 VUs** in 30s
+  - Stay at **10 VUs** for 30s
+  - Ramp-down to **0 VUs** in 30s
 
 ---
 
 ## Running the Test
 
-Run the script locally using the `k6 run` command:
-
+### 1. Default Profile (5 users)
+Run without extra environment flags (defaults to `default`):
 ```bash
 k6 run simple-test.js
 ```
+Or explicitly:
+```bash
+k6 run -e PROFILE=default simple-test.js
+```
 
-### Optional Flags
-- Run with custom duration / override stages:
-  ```bash
-  k6 run --vus 5 --duration 30s simple-test.js
-  ```
-- Output results to a JSON file:
-  ```bash
-  k6 run --out json=results.json simple-test.js
-  ```
+### 2. Full Profile (10 users)
+Run with `-e PROFILE=full`:
+```bash
+k6 run -e PROFILE=full simple-test.js
+```
+
+---
+
+## Inspecting Options
+
+You can verify the configuration without running the full test:
+
+```bash
+# Inspect default profile (target: 5)
+k6 inspect simple-test.js
+
+# Inspect full profile (target: 10)
+k6 inspect -e PROFILE=full simple-test.js
+```
+
+---
+
+## Docker Usage
+
+```bash
+# Default profile
+docker run --rm -i -v "$PWD:/work" -w /work grafana/k6 run simple-test.js
+
+# Full profile
+docker run --rm -i -v "$PWD:/work" -w /work -e PROFILE=full grafana/k6 run simple-test.js
+```
