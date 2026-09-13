@@ -65,10 +65,10 @@ docker run --rm -i -v "$PWD:/work" -w /work -e PROFILE=full grafana/k6 run simpl
 
 ## 📊 Automated Reports & Graphics
 
-After every run, k6's `handleSummary` automatically outputs a Markdown report with tables and an embedded **Mermaid latency chart**:
+After every run, k6's `handleSummary` automatically outputs Markdown reports with tables and an embedded **Mermaid latency chart** into the `reports/` folder (ignored by git):
 
-- [report.md](file:///home/mikelus/github/k6-samples/report.md) (latest run)
-- `report-default.md` or `report-full.md` (profile-specific archive)
+- `reports/report.md` (latest run)
+- `reports/report-default.md` or `reports/report-full.md` (profile-specific archive)
 
 ### Viewing & Exporting
 

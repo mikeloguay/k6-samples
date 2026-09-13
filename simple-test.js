@@ -28,10 +28,10 @@ export default function () {
 }
 
 export function handleSummary(data) {
-  const reportFilename = `report-${profileName}.md`;
+  const reportFilename = `reports/report-${profileName}.md`;
   return {
     stdout: textSummary(data, { indent: ' ', enableColors: true }),
-    'report.md': generateMarkdownReport(data, profileName),
+    'reports/report.md': generateMarkdownReport(data, profileName),
     [reportFilename]: generateMarkdownReport(data, profileName),
   };
 }
